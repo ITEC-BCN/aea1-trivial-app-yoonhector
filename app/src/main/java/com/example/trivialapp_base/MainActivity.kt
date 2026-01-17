@@ -37,7 +37,6 @@ class MainActivity : ComponentActivity() {
                 // Instanciamos el ViewModel una vez
                 val gameViewModel: GameViewModel by viewModels()
 
-
                 // Definición de rutas y navegación
                 NavHost(
                     navController = navigationController,

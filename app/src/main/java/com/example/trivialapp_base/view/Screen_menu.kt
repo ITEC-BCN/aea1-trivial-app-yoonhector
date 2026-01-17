@@ -6,5 +6,4 @@ import com.example.trivialapp_base.viewmodel.GameViewModel
 
 @Composable
 fun MenuScreen(navController: NavController, viewModel: GameViewModel) {
-
 }
