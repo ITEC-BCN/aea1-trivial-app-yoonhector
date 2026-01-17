@@ -12,12 +12,12 @@ fun GameScreen(navController: NavController, viewModel: GameViewModel) {
     Text(
         "Round 1/10",
         color = Color.Black,
-        fontSize = 30.sp
+        fontSize = 20.sp
     )
 
     Text(
-        viewModel.preguntaActual,
+        "Hola",
         color = Color.Black,
-        fontSize = 30.sp
+        fontSize = 50.sp
     )
 }
