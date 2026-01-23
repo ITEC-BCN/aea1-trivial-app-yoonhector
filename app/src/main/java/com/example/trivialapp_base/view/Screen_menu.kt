@@ -2,8 +2,11 @@ package com.example.trivialapp_base.view
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -16,11 +19,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.example.trivialapp_base.viewmodel.GameViewModel
+import androidx.compose.ui.window.Dialog
 
 @Composable
 fun MenuScreen(navController: NavController, viewModel: GameViewModel) {
 
     Column (horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
         ){
 
         Text("El mega suculento y para nada complicado juego de trivia")
@@ -70,13 +75,28 @@ fun MenuScreen(navController: NavController, viewModel: GameViewModel) {
                 Text("Hard")
             }
         }
-        Button(onClick = { 
-            navController.navigate("GameScreen")
-            viewModel.iniciarJuego()
+        Button(onClick = {
+            if (viewModel.dificultadSeleccionada.isEmpty()) {
+
+            } else {
+                navController.navigate("GameScreen")
+                viewModel.iniciarJuego()
+            }
         }
         )
         {
             Text("Start")
+        }
+    }
+}
+@Composable
+fun TasBobo(){
+    Dialog(onDismissRequest = {}) {
+        Column(
+            Modifier.background(Color.White)
+                .fillMaxWidth()
+        ) {
+            Text("You must select a difficulty")
         }
     }
 }

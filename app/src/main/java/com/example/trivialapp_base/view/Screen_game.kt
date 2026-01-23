@@ -16,9 +16,18 @@ import com.example.trivialapp_base.viewmodel.GameViewModel
 @Composable
 fun GameScreen(navController: NavController, viewModel: GameViewModel) {
 
+
     Column (horizontalAlignment = Alignment.CenterHorizontally){
+        Text("a")
+        Text("a")
+        Text("a")
+        Text("a")
+        Text("a")
+        Text("a")
+        Text("a")
         LinearProgressIndicator(progress = viewModel.tiempoRestante,
             Modifier.width(400.dp))
+
 
         Text(viewModel.preguntaActual!!.pregunta)
         Row {

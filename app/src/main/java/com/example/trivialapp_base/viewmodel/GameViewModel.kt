@@ -35,6 +35,9 @@ class GameViewModel : ViewModel() {
     var juegoTerminado by mutableStateOf(false)
         private set
 
+    var respuestasCorrectas by mutableIntStateOf(0)
+        private set
+
     var progressBar by mutableStateOf(0.0f)
 
     var dificultadSeleccionada by mutableStateOf("")
@@ -47,6 +50,13 @@ class GameViewModel : ViewModel() {
         dificultadSeleccionada = dificultad // Sense .value!
     }
     fun iniciarJuego() {
+        round = 0
+        indicesUsados = intArrayOf()
+        puntuacion = 0
+        juegoTerminado = false
+        respuestasCorrectas = 0
+        progressBar = 0.0f
+
         when (dificultadSeleccionada) {
             "Easy" -> numerosAleatoris = intArrayOf(0, 9)
             "Medium" -> numerosAleatoris = intArrayOf(10, 19)
@@ -69,13 +79,12 @@ class GameViewModel : ViewModel() {
         preguntaActual = preguntasPartida[indicePreguntaActual]
 
         respuestasMezcladas = listOf(preguntaActual!!.respuesta1, preguntaActual!!.respuesta2, preguntaActual!!.respuesta3, preguntaActual!!.respuesta4).shuffled()
-
-
     }
 
     fun responderPregunta(respuestaUsuario: String) {
         if (respuestaUsuario == preguntaActual?.respuestaCorrecta) {
             puntuacion += tiempoRestante.toInt()
+            respuestasCorrectas++
         }
 
         if (indicesUsados.size == 10) {
