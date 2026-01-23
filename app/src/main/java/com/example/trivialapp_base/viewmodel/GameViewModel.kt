@@ -11,12 +11,14 @@ import com.example.trivialapp_base.model.Pregunta
 import com.example.trivialapp_base.model.ProveedorPreguntas
 
 class GameViewModel : ViewModel() {
-    private var preguntasPartida: List<Pregunta> = emptyList()
+    private var preguntasPartida: List<Pregunta> = ProveedorPreguntas.obtenerPreguntas()
     private var numerosAleatoris = intArrayOf()
+    private var round = 0
 
     var indicePreguntaActual by mutableIntStateOf(0)
         private set
 
+    private var indicesUsados = intArrayOf()
     var preguntaActual by mutableStateOf<Pregunta?>(null)
         private set
 
@@ -47,16 +49,34 @@ class GameViewModel : ViewModel() {
             "Medium" -> numerosAleatoris = intArrayOf(10, 19)
             "Hard" -> numerosAleatoris = intArrayOf(20, 29)
         }
+        cargarSiguientePregunta()
     }
 
     private fun cargarSiguientePregunta() {
+        round++
+        iniciarTimer()
+
+        do {
+            indicePreguntaActual = (numerosAleatoris[0]..numerosAleatoris[1]).random()
+        } while (indicePreguntaActual in indicesUsados && !juegoTerminado)
+
+        preguntaActual = preguntasPartida[indicePreguntaActual]
     }
 
     fun responderPregunta(respuestaUsuario: String) {
-        puntuacion += tiempoRestante.toInt()
+        if (respuestaUsuario == preguntaActual?.respuestaCorrecta) {
+            puntuacion += tiempoRestante.toInt()
+        }
+
+        if (indicesUsados.size == 10) {
+            juegoTerminado = true;
+        } else {
+            cargarSiguientePregunta()
+        }
     }
 
     private fun avanzarRonda() {
+
     }
 
     private fun iniciarTimer() {
@@ -67,7 +87,7 @@ class GameViewModel : ViewModel() {
                 tiempoRestante = progreso
             }
 
-            override fun onFinish() {s
+            override fun onFinish() {
                 tiempoRestante = 0f
                 avanzarRonda()
             }
