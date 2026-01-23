@@ -49,10 +49,6 @@ class GameViewModel : ViewModel() {
 
     private fun avanzarRonda() {
     }
-
-    private fun iniciarTimer() {
-    }
-
     override fun onCleared() {
     }
 }
