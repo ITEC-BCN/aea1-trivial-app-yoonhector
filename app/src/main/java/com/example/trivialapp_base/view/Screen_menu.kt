@@ -70,7 +70,10 @@ fun MenuScreen(navController: NavController, viewModel: GameViewModel) {
                 Text("Hard")
             }
         }
-        Button(onClick = { navController.navigate("GameScreen") }
+        Button(onClick = { 
+            navController.navigate("GameScreen")
+            viewModel.iniciarJuego()
+        }
         )
         {
             Text("Start")
