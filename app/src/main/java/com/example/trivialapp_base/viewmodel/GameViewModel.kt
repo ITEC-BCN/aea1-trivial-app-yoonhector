@@ -5,10 +5,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.trivialapp_base.model.Pregunta
 import com.example.trivialapp_base.model.ProveedorPreguntas
+import com.example.trivialapp_base.view.GameScreen
+import kotlin.random.Random
 
 class GameViewModel : ViewModel() {
     private var preguntasPartida: List<Pregunta> = ProveedorPreguntas.obtenerPreguntas()
@@ -17,13 +20,11 @@ class GameViewModel : ViewModel() {
 
     var indicePreguntaActual by mutableIntStateOf(0)
         private set
-
     private var indicesUsados = intArrayOf()
     var preguntaActual by mutableStateOf<Pregunta?>(null)
         private set
 
     var respuestasMezcladas by mutableStateOf<List<String>>(emptyList())
-        private set
 
     var puntuacion by mutableIntStateOf(0)
         private set
@@ -33,6 +34,8 @@ class GameViewModel : ViewModel() {
 
     var juegoTerminado by mutableStateOf(false)
         private set
+
+    var progressBar by mutableStateOf(0.0f)
 
     var dificultadSeleccionada by mutableStateOf("")
         private set
@@ -54,13 +57,20 @@ class GameViewModel : ViewModel() {
 
     private fun cargarSiguientePregunta() {
         round++
-        iniciarTimer()
 
         do {
             indicePreguntaActual = (numerosAleatoris[0]..numerosAleatoris[1]).random()
-        } while (indicePreguntaActual in indicesUsados && !juegoTerminado)
+        } while (indicePreguntaActual in indicesUsados)
+
+        indicesUsados += indicePreguntaActual
+
+        iniciarTimer()
 
         preguntaActual = preguntasPartida[indicePreguntaActual]
+
+        respuestasMezcladas = listOf(preguntaActual!!.respuesta1, preguntaActual!!.respuesta2, preguntaActual!!.respuesta3, preguntaActual!!.respuesta4).shuffled()
+
+
     }
 
     fun responderPregunta(respuestaUsuario: String) {
@@ -70,30 +80,38 @@ class GameViewModel : ViewModel() {
 
         if (indicesUsados.size == 10) {
             juegoTerminado = true;
+            onCleared()
         } else {
-            cargarSiguientePregunta()
+            avanzarRonda()
         }
     }
 
     private fun avanzarRonda() {
-        cargarSiguientePregunta()
+        if (indicesUsados.size < 10) {
+            cargarSiguientePregunta()
+        }
     }
 
     private fun iniciarTimer() {
-        timer = object : CountDownTimer(TIEMPO_POR_PREGUNTA, 1000L) {
+        timer?.cancel()
+        timer = object : CountDownTimer(TIEMPO_POR_PREGUNTA, 100) {
             override fun onTick(millisUntilFinished: Long) {
-
-                val progreso = (millisUntilFinished.toFloat() / TIEMPO_POR_PREGUNTA.toFloat()) * 100f
-                tiempoRestante = progreso
+                tiempoRestante = millisUntilFinished.toFloat() / TIEMPO_POR_PREGUNTA
             }
 
             override fun onFinish() {
                 tiempoRestante = 0f
+                progressBar += 0.1f
                 avanzarRonda()
             }
         }.start()
     }
-
     override fun onCleared() {
+        super.onCleared()
+        timer?.cancel()
+    }
+
+    fun getPuntuacion(): String {
+        return puntuacion.toString()
     }
 }
