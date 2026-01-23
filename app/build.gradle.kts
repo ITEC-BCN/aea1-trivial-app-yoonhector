@@ -52,7 +52,8 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.core.splashscreen)
-    implementation(libs.androidx.navigation.compose) // SplashScreen
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.constraintlayout) // SplashScreen
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
