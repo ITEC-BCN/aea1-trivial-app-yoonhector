@@ -113,13 +113,3 @@ fun MenuScreen(navController: NavController, viewModel: GameViewModel) {
 
     }
 }
-
-@Composable
-fun Spacer (){
-    HorizontalDivider(
-        modifier = Modifier
-            .padding(0.dp, 10.dp),
-        thickness = 3.dp,
-        color = SHINee
-    )
-}
