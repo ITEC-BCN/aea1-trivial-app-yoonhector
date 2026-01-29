@@ -1,6 +1,7 @@
 package com.example.trivialapp_base.viewmodel
 
 import android.os.CountDownTimer
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -83,7 +84,12 @@ class GameViewModel : ViewModel() {
 
     fun responderPregunta(respuestaUsuario: String) {
         if (respuestaUsuario == preguntaActual?.respuestaCorrecta) {
-            puntuacion += tiempoRestante.toInt()
+            when (dificultadSeleccionada) {
+                "Easy" -> puntuacion += (tiempoRestante + 1 * 1.5).toInt()
+                "Medium" -> puntuacion += (tiempoRestante + 1 * 2).toInt()
+                "Hard" -> puntuacion += (tiempoRestante + 1 * 3).toInt()
+            }
+
             respuestasCorrectas++
         }
 
